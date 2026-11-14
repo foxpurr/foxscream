@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package foxscream;
+
+// Describes the type of attachment that is sent with a message, this is used to determine how to display the attachment in the client.
+enum AttachmentType {
+    // The attachment type is unknown, this is used when the attachment type is not specified.
+    ATTACHMENT_TYPE_UNSPECIFIED = 0;
+    // The attachment is an image.
+    ATTACHMENT_TYPE_IMAGE = 1;
+    // The attachment is a video.
+    ATTACHMENT_TYPE_VIDEO = 2;
+    // The attachment is a file.
+    ATTACHMENT_TYPE_FILE = 3;
+}
+
+// Describes an extension that can be used by clients to extend the protocol.
+message Extension {
+    // The human-readable name of the extension like "Example Extension".
+    string name = 2;
+    // The version of the extension.
+    Version version = 3;
+}
+
+// Describes arbitrary data that can be sent between the server and client, this is used to extend the protocol with new features.
+message ExtensionMessage {
+    // The unique identifier of the extension that is sending the data, this is used to determine which extension the data belongs to.
+    string id = 1;
+    // The arbitrary data that is sent between the server and client, this is used to extend the protocol with new features.
+    bytes data = 2;
+}
+
+// Describes the version of something on the protocol.
+message Version {
+    // The major version number. This is incremented when there are breaking changes to the software.
+    uint32 major = 1;
+    // The minor version number. This is incremented when there are new features added to the software.
+    uint32 minor = 2;
+    // The raw version string used for display purposes.
+    string raw = 3;
+}

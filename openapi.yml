@@ -1,0 +1,140 @@
+openapi: '3.2.0'
+info:
+  title: Foxscream API
+  version: '1.0.0'
+paths:
+  /.well-known/foxscream.json:
+    get:
+      summary: File to configure the client based on schema.
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WellKnown'
+  /api/v1/auth:
+    post:
+      summary: Authenticates to the WebSocket.
+      parameters:
+        - name: X-Cloudflare-Turnstile
+          in: header
+          description: Cloudflare Turnstile's token.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthRequest'
+      responses:
+        '200':
+          description: Success.
+          headers:
+            Set-Cookie:
+              description: Sets the session identifier to validation later.
+              schema:
+                type: string
+              example: session_id=xyz123; Path=/; Secure; HttpOnly; SameSite=Strict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+components:
+  schemas:
+    AuthRequest:
+      oneOf:
+        - $ref: '#/components/schemas/WebAuthRequest'
+        - $ref: '#/components/schemas/NativeAuthRequest'
+        - $ref: '#/components/schemas/GrantAuthRequest'
+    WebAuthRequest:
+      description: WebAuthRequest
+      required:
+        - roomId
+        - displayName
+        - type
+      properties:
+        roomId:
+          type: string
+          description: Room's identifier.
+          example: '012345'
+        displayName:
+          type: string
+          description: Display name for the user on the call room.
+          example: Example User
+        type:
+          type: string
+          description: Specify the type of the authentication request.
+          const: web
+    NativeAuthRequest:
+      description: NativeAuthRequest
+      required:
+        - roomId
+        - displayName
+        - challenge
+        - type
+      properties:
+        roomId:
+          type: string
+          description: Room's identifier.
+          example: '012345'
+        displayName:
+          type: string
+          description: Display name for the user on the call room.
+          example: Example User
+        challenge:
+          type: string
+          description: Code challenge for PKCE.
+          example: abc123
+        type:
+          type: string
+          description: Specify the type of the authentication request.
+          const: native
+    GrantAuthRequest:
+      description: GrantAuthRequest
+      required:
+        - roomId
+        - challenge
+        - type
+      properties:
+        roomId:
+          type: string
+          description: Room's identifier.
+          example: '012345'
+        challenge:
+          type: string
+          description: Code challenge for PKCE.
+          example: abc123
+        type:
+          type: string
+          description: Specify the type of the authentication request.
+          const: grant
+    AuthResponse:
+      description: AuthResponse
+      required:
+        - token
+      properties:
+        token:
+          type: string
+          description: Token to be used by the client when connecting to the WebSocket.
+          example: abc123
+    WellKnown:
+      description: WellKnown
+      required:
+        - websocketUrl
+        - joinPageUrl
+        - grantPageUrl
+      properties:
+        websocketUrl:
+          type: string
+          description: URL to connect the WebSocket.
+          example: https://example.com/ws
+        joinPageUrl:
+          type: string
+          description: URL to user grant or join to a call, you need redirect or open browser to this URL, maybe the client will add query parameters like redirect_uri, code_challenge, state, room_id, name.
+          example: https://example.com/join
+        grantPageUrl:
+          type: string
+          description: URL to user grant state access, you need redirect or open browser to this URL, maybe the client will add query parameters like redirect_uri, code_challenge, state, room_id, scope (read:state).
+          example: https://example.com/grant

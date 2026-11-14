@@ -1,0 +1,129 @@
+syntax = "proto3";
+
+package foxscream;
+
+import "common.proto";
+
+// Describes the messages that the client sends to the server.s
+message ClientToServer {
+    oneof message {
+        ClientHello client_hello = 1;
+        RequestSessionInfo request_session_info = 2;
+        UpdateUser update_user = 3;
+        SendMessage send_message = 4;
+        RemoveMessage remove_message = 5;
+        StartFileTransfer start_file_transfer = 6;
+        CancelFileTransfer cancel_file_transfer = 7;
+        TalkingState talking_state = 8;
+        RequestSdpOffer request_sdp_offer = 9;
+        SdpOffer sdp_offer = 10;
+        SdpAnswer sdp_answer = 11;
+        IceCandidate ice_candidate = 12;
+        foxscream.ExtensionMessage extension_message = 13;
+    }
+}
+
+// Describes the message that the client sends to the server when it validates the ServerHello message.
+message ClientHello {
+    // The token that the client uses to authenticate with the server.
+    string token = 1;
+    /**
+    * The extensions that the client is enabling to use on this connection.
+    *
+    * It need to only contains the extensions that the server has advertised in the ServerHello message or the server will reject the connection.
+    */
+    repeated string extensions = 2;
+}
+
+// Describes the message that the client sends to the server when it wants to request the session information from the server.
+message RequestSessionInfo {}
+
+// Describes the message that the client sends to the server when it wants to update its user information.
+message UpdateUser {
+    // The name of the user that the client is updating, this is used to display the user's name in the client.
+    optional string name = 1;
+    // The URL of the avatar that the client is updating, this is used to display the user's avatar in the client.
+    optional string avatar_url = 2;
+    // The microphone state of the user that the client is updating, this is used to display the user's microphone state in the client.
+    optional bool microphone = 3;
+    // The camera state of the user that the client is updating, this is used to display the user's camera state in the client.
+    optional bool camera = 4;
+    // The screen sharing state of the user that the client is updating, this is used to display the user's screen sharing state in the client.
+    optional bool screen_sharing = 5;
+}
+
+// Describes the message that the client sends to the server when it wants to send a message to the chat.
+message SendMessage {
+    // The content of the message that the client is sending to the server.
+    string content = 1;
+    // The URL of the attachment that is sent with the message, this is usually a link to a file that is sent with the message.
+    string attachment_url = 2;
+    // The type of the attachment that is sent with the message.
+    foxscream.AttachmentType attachment_type = 3;
+}
+
+// Describes the message that the client sends to the server when it wants to remove a message from the chat history.
+message RemoveMessage {
+    // The unique identifier of the message that the client is requesting to remove.
+    string id = 1;
+}
+
+// Describes the message that the client sends to the server when it wants to start a file transfer.
+message StartFileTransfer {
+    // User-defined unique identifier for the file transfer, this is used to identify the file transfer in the server and client.
+    uint32 id = 1;
+    // The name of the file that the client is transferring.
+    string file_name = 2;
+    // The size of the file that the client is transferring in bytes.
+    uint64 file_size = 3;
+}
+
+// Describes the message that the client sends to the server when it wants to cancel a file transfer.
+message CancelFileTransfer {
+    // User-defined unique identifier for the file transfer, this is used to identify the file transfer in the server and client.
+    uint32 id = 1;
+}
+
+// Describes the message that the client sends to the server when it wants to update its talking state.
+message TalkingState {
+    // If the user is currently talking, this is used to display the talking state in the client.
+    bool talking = 1;
+}
+
+// Describes the message that the client sends to the server when it wants to request an SDP offer from another user.
+message RequestSdpOffer {
+    // The unique identifier of the user that the client is requesting an SDP offer from.
+    string user_id = 1;
+}
+
+// Describes the message that the client sends to the server when it wants to send an SDP answer to another user.
+message SdpOffer {
+    // The unique identifier of the user that the client is sending the SDP offer to.
+    string user_id = 1;
+    // The SDP offer that the client is sending to the other user.
+    string sdp_offer = 2;
+    // The media ID of the microphone stream, this is used to identify the media stream for the microphone in the WebRTC connection.
+    string microphone_mid = 3;
+    // The media ID of the camera stream, this is used to identify the media stream for the camera in the WebRTC connection.
+    string camera_mid = 4;
+    // The media ID of the screen sharing stream, this is used to identify the media stream for screen sharing in the WebRTC connection.
+    string screen_sharing_mid = 5;
+    // The mapping of file transfer IDs to their corresponding media IDs, this is used to identify the media streams for file transfers in the WebRTC connection.
+    map<uint32, string> file_transfer_mids = 6;
+}
+
+// Describes the message that the client sends to the server when it wants to send an SDP answer to another user.
+message SdpAnswer {
+    // The unique identifier of the user that the client is sending the SDP answer to.
+    string user_id = 1;
+    // The SDP answer that the client is sending to the other user.
+    string sdp_answer = 2;
+}
+
+// Describes the message that the client sends to the server when it wants to send an ICE candidate to another user.
+message IceCandidate {
+    // The unique identifier of the user that the client is sending the ICE candidate to.
+    string user_id = 1;
+    // The ICE candidate that the client is sending to the other user.
+    string ice_candidate = 2;
+}
