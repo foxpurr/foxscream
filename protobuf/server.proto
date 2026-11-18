@@ -24,7 +24,7 @@ message ServerToClient {
 
 // The server hello message is sent by the server to the client when a connection is established.
 message ServerHello {
-    // The protocol name that the server is using, for Foxscream this is always "com.kitsuvm.foxscream".
+    // The protocol name that the server is using, for Foxscream this is always "com.kitsuvm.foxpurr.foxscream".
     string protocol = 1;
     // The protocol version that the server is using.
     foxscream.Version protocol_version = 2;
