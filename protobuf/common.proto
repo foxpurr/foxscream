@@ -39,3 +39,41 @@ message Version {
     // The raw version string used for display purposes.
     string raw = 3;
 }
+
+// Describes the message that is sent between the server and client when a SDP offer is being requested.
+message RequestSdpOffer {
+    // The unique identifier of the user that's requesting or to receive the SDP offer request.
+    string user_id = 1;
+}
+
+// Describes the message that is sent between the server and client for responding to a SDP offer request.
+message SdpOffer {
+    // The unique identifier of the user that is sending or to send the SDP offer to.
+    string user_id = 1;
+    // The SDP offer, this is used to establish a WebRTC connection.
+    string sdp_offer = 2;
+    // The media ID of the microphone stream, this is used to identify the media stream for the microphone in the WebRTC connection.
+    string microphone_mid = 3;
+    // The media ID of the camera stream, this is used to identify the media stream for the camera in the WebRTC connection.
+    string camera_mid = 4;
+    // The media ID of the screen sharing stream, this is used to identify the media stream for screen sharing in the WebRTC connection.
+    string screen_sharing_mid = 5;
+    // The mapping of file transfer IDs to their corresponding media IDs, this is used to identify the media streams for file transfers in the WebRTC connection.
+    map<uint32, string> file_transfer_mids = 6;
+}
+
+// Describes the message that is sent between the server and client for responding to a SDP offer.
+message SdpAnswer {
+    // The unique identifier of the user that is sending or to send the SDP answer to.
+    string user_id = 1;
+    // The SDP answer, this is used to establish a WebRTC connection.
+    string sdp_answer = 2;
+}
+
+// Describes the message that is sent between the server and client for sending ICE candidates.
+message IceCandidate {
+    // The unique identifier of the user that is sending or to send the ICE candidate to.
+    string user_id = 1;
+    // The ICE candidate string, this is used to establish a WebRTC connection.
+    string ice_candidate = 2;
+}

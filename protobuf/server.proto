@@ -14,10 +14,10 @@ message ServerToClient {
         Message message_update = 5;
         ResourceRemoved resource_removed = 6;
         TalkingStateUpdate talking_state_update = 7;
-        RequestSdpOffer request_sdp_offer = 8;
-        SdpOffer sdp_offer = 9;
-        SdpAnswer sdp_answer = 10;
-        IceCandidate ice_candidate = 11;
+        foxscream.RequestSdpOffer request_sdp_offer = 8;
+        foxscream.SdpOffer sdp_offer = 9;
+        foxscream.SdpAnswer sdp_answer = 10;
+        foxscream.IceCandidate ice_candidate = 11;
         foxscream.ExtensionMessage extension_message = 12;
     }
 }
@@ -156,42 +156,4 @@ message TalkingStateUpdate {
     string user_id = 1;
     // If the user is talking or not.
     bool talking = 2;
-}
-
-// Describes the message that the server sends to the client when a user is updated.
-message RequestSdpOffer {
-    // The unique identifier of the user that the client is requesting an SDP offer from.
-    string user_id = 1;
-}
-
-// Describes the message that the server sends to the client when it wants to send an SDP offer to another user.
-message SdpOffer {
-    // The unique identifier of the user that the client is sending the SDP offer to.
-    string user_id = 1;
-    // The SDP offer that the client is sending to the server.
-    string sdp_offer = 2;
-    // The media ID of the microphone stream, this is used to identify the media stream for the microphone in the WebRTC connection.
-    string microphone_mid = 3;
-    // The media ID of the camera stream, this is used to identify the media stream for the camera in the WebRTC connection.
-    string camera_mid = 4;
-    // The media ID of the screen sharing stream, this is used to identify the media stream for screen sharing in the WebRTC connection.
-    string screen_sharing_mid = 5;
-    // The mapping of file transfer IDs to their corresponding media IDs, this is used to identify the media streams for file transfers in the WebRTC connection.
-    map<uint32, string> file_transfer_mids = 6;
-}
-
-// Describes the message that the server sends to the client when it wants to send an SDP answer to another user.
-message SdpAnswer {
-    // The unique identifier of the user that the client is sending the SDP answer to.
-    string user_id = 1;
-    // The SDP answer that the client is sending to the server.
-    string sdp_answer = 2;
-}
-
-// Describes the message that the server sends to the client when it wants to send an ICE candidate to another user.
-message IceCandidate {
-    // The unique identifier of the user that the client is sending the ICE candidate to.
-    string user_id = 1;
-    // The ICE candidate that the client is sending to the server.
-    string ice_candidate = 2;
 }
