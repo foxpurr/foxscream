@@ -1,0 +1,16 @@
+[package]
+name = "foxscream"
+description = "Foxscream protocol implementation in Rust"
+version = "0.1.0"
+edition = "2024"
+repository = "https://github.com/foxpurr/foxscream"
+license = "MIT"
+keywords = ["protocol", "web", "call"]
+publish = false
+
+[build-dependencies]
+protoc-bin-vendored = "3.3.0"
+prost-build = "0.14.6"
+
+[dependencies]
+prost = "0.14.6"
