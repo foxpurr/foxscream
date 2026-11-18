@@ -1,0 +1,37 @@
+{
+  "name": "foxscream",
+  "version": "0.1.0",
+  "description": "Foxscream protocol implementation in JavaScript.",
+  "keywords": [
+    "protocol",
+    "web",
+    "call"
+  ],
+  "homepage": "https://github.com/foxpurr/foxscream#readme",
+  "bugs": {
+    "url": "https://github.com/foxpurr/foxscream/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/foxpurr/foxscream.git"
+  },
+  "license": "MIT",
+  "author": "Fox's Purr",
+  "type": "module",
+  "exports": {
+    "./*": {
+      "types": "./src/*_pb.d.ts",
+      "import": "./src/*_pb.js"
+    }
+  },
+  "scripts": {
+    "generate": "buf generate"
+  },
+  "dependencies": {
+    "@bufbuild/protobuf": "^2.17.0"
+  },
+  "devDependencies": {
+    "@bufbuild/buf": "^1.75.0",
+    "@bufbuild/protoc-gen-es": "^2.17.0"
+  }
+}
