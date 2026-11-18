@@ -1,7 +1,8 @@
 [package]
 name = "foxscream"
-description = "Foxscream protocol implementation in Rust"
 version = "0.1.0"
+description = "Foxscream protocol implementation in Rust."
+authors = ["Fox's Purr", "Kitsu/VM <contact@kitsuvm.com>", "SpaceFox"]
 edition = "2024"
 repository = "https://github.com/foxpurr/foxscream"
 license = "MIT"
